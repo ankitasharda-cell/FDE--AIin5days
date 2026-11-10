@@ -1,0 +1,35 @@
+rm -rf /tmp/FDE--AIin5days
+git clone https://github.com/ankitasharda-cell/FDE--AIin5days.git /tmp/FDE--AIin5days || (
+  mkdir -p /tmp/FDE--AIin5days
+  cd /tmp/FDE--AIin5days
+  git init -b main
+  git remote add origin https://github.com/ankitasharda-cell/FDE--AIin5days.git
+)
+cd /tmp/FDE--AIin5days
+git checkout -B main
+
+mkdir -p .agents/agents/ai_five_days_tutor/skills/five_day_ai_curriculum/references
+
+cat << 'EOF_README' > README.md
+# 🎓 AI in Five Days — Interactive Tutor Agent
+
+An interactive AI tutor and hands-on coding coach built for the **AI in Five Days** training program. It guides learners step-by-step from LLM and prompt engineering fundamentals to tool calling, Model Context Protocol (MCP), context engineering, reusable skills, multi-agent systems with **Google ADK (Agent Development Kit)**, and agent evaluation.
+
+## 📂 Repository Structure
+
+```text
+.
+├── README.md
+└── .agents/
+    └── agents/
+        └── ai_five_days_tutor/
+            ├── agent.md
+            └── skills/
+                └── five_day_ai_curriculum/
+                    ├── SKILL.md
+                    └── references/
+                        ├── day1_foundations.md
+                        ├── day2_tools_and_knowledge.md
+                        ├── day3_context_and_skills.md
+                        ├── day4_multi_agent_and_adk.md
+                        └── day5_capstone.md
