@@ -1,25 +1,33 @@
-# Daily Antigravity learning agent
+# Daily Antigravity digest
 
-This repository includes a GitHub Actions workflow that publishes a daily Antigravity learning digest at 09:00 UTC and posts it to a Google Chat space. Each digest includes a rotating hands-on learning prompt, official Antigravity resource links, and matching Antigravity mentions found in public Google developer feeds.
+This GitHub Actions workflow emails a daily digest of news about Google's
+Antigravity development platform at 9:00 a.m. Pacific time, including daylight
+saving time. GitHub may delay scheduled runs. It searches Google News for
+recent English-language headlines, asks Gemini to summarize those headlines,
+and includes the original source links. The summaries are based on headlines,
+not full articles, and the feed does not cover every update.
 
-## Configure Google Chat
+## Setup
 
-1. In the target Google Chat space, create an incoming webhook and copy its URL.
-2. In this GitHub repository, open Settings → Secrets and variables → Actions.
-3. Create a repository secret named `GOOGLE_CHAT_WEBHOOK_URL` and set its value to the webhook URL. Keep the URL secret; anyone with it may be able to post to the space.
-4. Under Settings → Actions → General → Workflow permissions, allow read and write access to repository contents so the workflow can archive each digest.
-5. Run Actions → Daily Antigravity learning digest → Run workflow to test it.
+In the repository's **Settings > Secrets and variables > Actions**, add these
+repository secrets:
 
-## Where to find the updates
+| Secret | Value |
+| --- | --- |
+| `GEMINI_API_KEY` | Google Gemini API key with access to `gemini-2.5-flash` |
+| `SMTP_HOST` | SMTP server hostname |
+| `SMTP_PORT` | SMTP port (optional; defaults to 587 for STARTTLS, or use 465 for implicit TLS) |
+| `SMTP_USERNAME` | SMTP login |
+| `SMTP_PASSWORD` | SMTP password or provider-specific app password |
+| `SMTP_FROM` | Sender email address |
+| `SMTP_TO` | Recipient email address |
 
-Digest archives are committed to `daily-digests/`. The scheduled workflow runs every day at 09:00 UTC. GitHub Actions may start scheduled runs a little later during high load.
+Use an SMTP provider that permits authenticated sending. Never commit credentials.
+After the workflow is on the default branch and the secrets are configured, use
+**Actions > Daily Antigravity digest > Run workflow** to send a test email.
+Scheduled workflows run only from the default branch and can be disabled by
+GitHub after prolonged inactivity in a public repository.
 
-## Public feeds and resources
-
-The agent checks these public feeds for entries mentioning Antigravity:
-- Google Developers Blog Atom feed: https://developers.googleblog.com/atom.xml
-- Google AI Blog RSS feed: https://blog.google/rss/
-
-It also includes links to the Antigravity documentation, Getting Started codelab, and Building with Antigravity codelab.
-
-Feed checks are best-effort. If a feed is unavailable, the learning prompt and resource links are still produced. Feed matching uses the word “Antigravity” and may not find every relevant update.
+If no recent headlines are found, the email says so. Feed, Gemini, and SMTP
+errors fail the workflow rather than sending a misleading digest. Headlines are
+sent to Gemini for summarization.
